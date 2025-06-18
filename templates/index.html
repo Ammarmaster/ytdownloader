@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProDevOps YouTube Downloader</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF0000;
+            --primary-dark: #CC0000;
+            --secondary: #282828;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .brand-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .brand-text h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        .brand-text p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        .social-links {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.3s;
+        }
+        .social-btn:hover {
+            transform: translateY(-2px);
+        }
+        .download-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        .error-alert {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c62828;
+        }
+        .url-form {
+            margin-bottom: 25px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+        .input-group input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .analyze-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .analyze-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        .video-card {
+            display: flex;
+            gap: 20px;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #eee;
+        }
+        .video-thumbnail {
+            flex: 0 0 200px;
+        }
+        .video-thumbnail img {
+            width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        .video-details {
+            flex: 1;
+        }
+        .video-details h3 {
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        .meta-info {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        .meta-info span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .download-form {
+            margin-top: 20px;
+        }
+        .quality-selector {
+            margin-bottom: 15px;
+        }
+        .quality-selector label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .quality-selector select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: white;
+        }
+        .download-btn {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .download-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        .app-footer {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+            padding: 20px 0;
+        }
+        @media (max-width: 768px) {
+            .brand-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .video-card {
+                flex-direction: column;
+            }
+            .video-thumbnail {
+                flex: 1;
+                margin-bottom: 15px;
+            }
+            .input-group {
+                flex-direction: column;
+            }
+            .analyze-btn {
+                justify-content: center;
+                padding: 12px;
+            }
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            .download-container {
+                padding: 15px;
+            }
+            .brand-text h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <header class="brand-header">
+           <img src="{{ url_for('static', filename='logo.jpg') }}" alt="ProDevOps Logo" class="logo">
+            <div class="brand-text">
+                <h1>ProDevOps YouTube Downloader</h1>
+                <p>Download videos in any quality</p>
+            </div>
+        </header>
+
+        <div class="social-links">
+            <a href="https://instagram.com/prodevops" target="_blank" class="social-btn">
+                <i class="fab fa-instagram"></i> @prodevops
+            </a>
+        </div>
+
+        <div class="download-container">
+            {% if error %}
+                <div class="error-alert">{{ error }}</div>
+            {% endif %}
+            
+            <form method="POST" action="{{ url_for('index') }}" class="url-form">
+                <div class="input-group">
+                    <input type="text" id="youtube_url" name="youtube_url" 
+                           placeholder="Paste YouTube URL here..." 
+                           value="{{ youtube_url if youtube_url else '' }}" required>
+                    <button type="submit" class="analyze-btn">
+                        <i class="fas fa-search"></i> Analyze
+                    </button>
+                </div>
+            </form>
+
+            {% if video_info %}
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="{{ video_info.thumbnail }}" alt="Video thumbnail">
+                </div>
+                
+                <div class="video-details">
+                    <h3>{{ video_info.title }}</h3>
+                    <div class="meta-info">
+                        <span><i class="fas fa-clock"></i> {{ video_info.duration // 60 }}:{{ '%02d' % (video_info.duration % 60) }}</span>
+                    </div>
+                    
+                    <form method="POST" action="{{ url_for('download') }}" class="download-form">
+                        <input type="hidden" name="youtube_url" value="{{ youtube_url }}">
+                        
+                        <div class="quality-selector">
+                            <label for="quality"><i class="fas fa-film"></i> Select Quality:</label>
+                            <select name="quality" id="quality" required>
+                                {% for res in video_info.resolutions %}
+                                    <option value="{{ res }}">{{ res }}p</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="download-btn">
+                            <i class="fas fa-download"></i> Download Now
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <footer class="app-footer">
+            <p>© 2023 ProDevOps YouTube Downloader. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
