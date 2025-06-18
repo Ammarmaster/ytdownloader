@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request, send_from_directory, redirect, url_for
 import os
 import yt_dlp
-from urllib.parse import urlparse
+from flask import Flask, render_template, request, send_from_directory, redirect, url_for
 
 app = Flask(__name__)
 
@@ -110,4 +109,4 @@ def download():
         return render_template('index.html', error=f"Download failed: {str(e)}")
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 10000)))

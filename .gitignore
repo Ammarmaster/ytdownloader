@@ -1,11 +1,6 @@
-# Python
 __pycache__/
 *.pyc
 *.pyo
-
-# Downloads
-downloads/
-
-# Environment
 .env
 venv/
+downloads/
